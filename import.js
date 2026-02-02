@@ -1,0 +1,61 @@
+import mongoose from "mongoose";
+import fs from "fs";
+
+//mongodb+srv://layerlTool:zXBGyaj0a5Q7eDys@cluster0.u6nvae5.mongodb.net/
+
+// Подключение к Mongo
+await mongoose.connect(
+  "mongodb+srv://layerlTool:zXBGyaj0a5Q7eDys@cluster0.u6nvae5.mongodb.net/cartDB",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+);
+
+// Схема заявки
+const itemSchema = new mongoose.Schema(
+  {
+    id: Number,
+    nam: String,
+    tel: String,
+    mail: String,
+    prodact: String,
+    status: String,
+    dateDate: String,
+    dateTime: String,
+  },
+  { collection: "items" },
+);
+
+const Item = mongoose.model("Item", itemSchema);
+
+// Схема для lastId
+const counterSchema = new mongoose.Schema(
+  {
+    _id: String,
+    lastId: Number,
+  },
+  { collection: "counters" },
+);
+
+const Counter = mongoose.model("Counter", counterSchema);
+
+async function importData() {
+  const raw = fs.readFileSync("./db.json", "utf-8");
+  const data = JSON.parse(raw);
+
+  // Очистим коллекции
+  await Item.deleteMany({});
+  await Counter.deleteMany({});
+
+  // Сохраним заявки как отдельные документы
+  await Item.insertMany(data.items);
+
+  // Сохраним lastId
+  await new Counter({ _id: "items", lastId: data.lastId }).save();
+
+  console.log("✅ Данные успешно импортированы!");
+  process.exit();
+}
+
+importData();
