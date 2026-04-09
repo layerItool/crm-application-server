@@ -5,7 +5,7 @@ import fs from "fs";
 
 // Подключение к Mongo
 await mongoose.connect(
-  "mongodb+srv://mexiko944_db_user:b3eFGWeg9rzc2cRk@cluster0.kfc1ghu.mongodb.net/items",
+  "mongodb+srv://mexiko944_db_user:b3eFGWeg9rzc2cRk@cluster0.kfc1ghu.mongodb.net/cartDB/items",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
