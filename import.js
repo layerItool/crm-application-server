@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import fs from "fs";
 
-//mongodb+srv://layerlTool:zXBGyaj0a5Q7eDys@cluster0.u6nvae5.mongodb.net/
+//mongodb+srv://mexiko944_db_user:b3eFGWeg9rzc2cRk@cluster0.kfc1ghu.mongodb.net/
 
 // Подключение к Mongo
 await mongoose.connect(
-  "mongodb+srv://layerlTool:zXBGyaj0a5Q7eDys@cluster0.u6nvae5.mongodb.net/cartDB",
+  "mongodb+srv://mexiko944_db_user:b3eFGWeg9rzc2cRk@cluster0.kfc1ghu.mongodb.net/cartDB",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
