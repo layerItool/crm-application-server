@@ -60,7 +60,7 @@ app.get("/items", async (req, res) => {
 app.get("/items/:id", async (req, res) => {
   const id = Number(req.params.id);
   try {
-    const doc = await MyModel.findById(id); // ищем по _id
+    const doc = await MyModel.findOne({ id: id }); // ищем по id
     if (!doc) return res.status(404).json({ message: "Not found" });
     res.json(doc);
   } catch (err) {
