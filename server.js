@@ -15,14 +15,19 @@ mongoose
 // Схема заявки
 const ItemSchema = new mongoose.Schema(
   {
-    id: Number,
-    nam: String,
-    tel: String,
-    mail: String,
-    prodact: String,
-    status: String,
-    dateTime: String,
-    dateDate: String,
+    lastId: Number,
+    items: [
+      {
+        id: Number,
+        nam: String,
+        tel: String,
+        mail: String,
+        prodact: String,
+        status: String,
+        dateDate: String,
+        dateTime: String,
+      },
+    ],
   },
   { collection: "items", versionKey: false },
 );
