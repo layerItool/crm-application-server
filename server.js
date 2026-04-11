@@ -61,7 +61,7 @@ app.get("/items/:id", async (req, res) => {
   const id = Number(req.params.id);
 
   try {
-    const doc = await Item.findOne({ "items.id": id }); // 👈 ищем внутри массива
+    const doc = await Item.findOne(); // 👈 просто берём документ
 
     if (!doc) {
       return res.status(404).json({ message: "Not found" });
