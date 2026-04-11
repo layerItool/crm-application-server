@@ -59,10 +59,17 @@ app.get("/items", async (req, res) => {
 // 📄 Получить заявку по id
 app.get("/items/:id", async (req, res) => {
   const id = Number(req.params.id);
+
   try {
-    const doc = await findOne({ id }); // ищем по id
-    if (!doc) return res.status(404).json({ message: "Not found" });
-    res.json(doc);
+    const doc = await Item.findOne({ "items.id": id }); // 👈 ищем внутри массива
+
+    if (!doc) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    const item = doc.items.find((i) => i.id === id); // 👈 достаём нужный элемент
+
+    res.json(item); // 👈 возвращаем ТОЛЬКО элемент
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
