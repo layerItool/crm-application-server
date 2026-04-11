@@ -52,8 +52,8 @@ async function getNextId() {
 
 // 📄 Получить все заявки
 app.get("/items", async (req, res) => {
-  const items = await Item.find();
-  res.json(items);
+  const doc = await Item.findOne();
+  res.json(doc.items);
 });
 
 // 📄 Получить заявку по id
