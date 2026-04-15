@@ -102,10 +102,29 @@ app.post("/items", async (req, res) => {
 // ✏️ Обновить заявку
 app.put("/items/:id", async (req, res) => {
   const id = Number(req.params.id);
-  console.log("🚀 ~ id:", id);
-  const updated = await Item.findOneAndUpdate({ id }, req.body, { new: true });
-  if (!updated) return res.status(404).json({ error: "Не найдено" });
-  res.json(updated);
+
+  try {
+    const doc = await Item.findOne();
+
+    if (!doc || !doc.items) {
+      return res.status(404).json({ error: "Нет данных" });
+    }
+
+    const item = doc.items.find((i) => i.id === id);
+
+    if (!item) {
+      return res.status(404).json({ error: "Не найдено" });
+    }
+
+    // обновляем поля
+    Object.assign(item, req.body);
+
+    await doc.save();
+
+    res.json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // 🗑️ Удалить заявку
