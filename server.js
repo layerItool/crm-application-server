@@ -123,7 +123,6 @@ app.delete("/items/:id", async (req, res) => {
 
     // удаляем элемент
     doc.items = doc.items.filter((item) => item.id !== id);
-    console.log("🚀 ~  doc.items:", doc.items);
 
     if (doc.items.length === initialLength) {
       return res.status(404).json({ error: "Не найдено" });
