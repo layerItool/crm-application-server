@@ -66,7 +66,7 @@ app.get("/items/:id", async (req, res) => {
   const id = Number(req.params.id);
 
   try {
-    const doc = await Item.findOne({}); // 👈 просто берём документ
+    const doc = await Item.findOne(); // 👈 просто берём документ
 
     if (!doc) {
       return res.status(404).json({ message: "Not found" });
@@ -82,10 +82,21 @@ app.get("/items/:id", async (req, res) => {
 
 // ➕ Добавить заявку
 app.post("/items", async (req, res) => {
-  const newId = await getNextId();
-  const newItem = new Item({ id: newId, ...req.body });
-  await newItem.save();
-  res.status(201).json(newItem);
+  const doc = await Item.findOne();
+
+  const newId = doc.lastId + 1;
+
+  const newItem = {
+    id: newId,
+    ...req.body,
+  };
+
+  doc.items.push(newItem);
+  doc.lastId = newId;
+
+  await doc.save();
+
+  res.json(newItem);
 });
 
 // ✏️ Обновить заявку

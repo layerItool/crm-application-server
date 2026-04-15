@@ -15,7 +15,6 @@ await mongoose.connect(
 // Схема заявки
 const itemSchema = new mongoose.Schema(
   {
-    id: Number,
     nam: String,
     tel: String,
     mail: String,
@@ -49,7 +48,7 @@ async function importData() {
   await Counter.deleteMany({});
 
   // Сохраним заявки как отдельные документы
-  await Item.insertMany(data.items);
+  await Item.insertMany([data]);
 
   // Сохраним lastId
   await new Counter({ _id: "items", lastId: data.lastId }).save();
