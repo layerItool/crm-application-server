@@ -102,6 +102,7 @@ app.post("/items", async (req, res) => {
 // ✏️ Обновить заявку
 app.put("/items/:id", async (req, res) => {
   const id = Number(req.params.id);
+  console.log("🚀 ~ id:", id);
   const updated = await Item.findOneAndUpdate({ id }, req.body, { new: true });
   if (!updated) return res.status(404).json({ error: "Не найдено" });
   res.json(updated);
@@ -110,9 +111,30 @@ app.put("/items/:id", async (req, res) => {
 // 🗑️ Удалить заявку
 app.delete("/items/:id", async (req, res) => {
   const id = Number(req.params.id);
-  const deleted = await Item.findOneAndDelete({ id });
-  if (!deleted) return res.status(404).json({ error: "Не найдено" });
-  res.json({ success: true });
+
+  try {
+    const doc = await Item.findOne();
+
+    if (!doc || !doc.items) {
+      return res.status(404).json({ error: "Нет данных" });
+    }
+
+    const initialLength = doc.items.length;
+
+    // удаляем элемент
+    doc.items = doc.items.filter((item) => item.id !== id);
+    console.log("🚀 ~  doc.items:", doc.items);
+
+    if (doc.items.length === initialLength) {
+      return res.status(404).json({ error: "Не найдено" });
+    }
+
+    await doc.save();
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.listen(4000, () =>
